@@ -293,7 +293,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
 	//@@PVAPP_BEGIN
 	return true;  
     //return enableH264HighProfile && Build.VERSION.SDK_INT > Build.VERSION_CODES.M
-        && info.getName().startsWith(EXYNOS_PREFIX);
+    //    && info.getName().startsWith(EXYNOS_PREFIX);
 	//@@PVAPP_END
   }
 }

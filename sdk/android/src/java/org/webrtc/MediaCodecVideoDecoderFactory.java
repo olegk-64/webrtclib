@@ -70,13 +70,33 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
       MediaCodecInfo codec = findCodecForType(type);
       if (codec != null) {
         String name = type.name();
-        if (type == VideoCodecMimeType.H264 && isH264HighProfileSupported(codec)) {
-          supportedCodecInfos.add(new VideoCodecInfo(
-              name, MediaCodecUtils.getCodecProperties(type, /* highProfile= */ true), new ArrayList<>()));
-        }
+		
+		//@@PVAPP_BEGIN
+		if (type == VideoCodecMimeType.H264) {
+		    if (isH264HighProfileSupported(codec)) {
+		      supportedCodecInfos.add(new VideoCodecInfo(name, 
+				  MediaCodecUtils.getH264HighProperties(), new ArrayList<>()));
+		    }
 
-        supportedCodecInfos.add(new VideoCodecInfo(
-            name, MediaCodecUtils.getCodecProperties(type, /* highProfile= */ false), new ArrayList<>()));
+		    supportedCodecInfos.add(new VideoCodecInfo(name,
+				MediaCodecUtils.getH264ConstrainedBaselineProperties, new ArrayList<>()));
+
+		    supportedCodecInfos.add(new VideoCodecInfo(name,
+				MediaCodecUtils.getH264BaselineProperties, new ArrayList<>()));
+			
+		} else {
+		    supportedCodecInfos.add(new VideoCodecInfo(name,
+		        MediaCodecUtils.getDefaultCodecProperties, new ArrayList<>()));
+		}
+		
+        //if (type == VideoCodecMimeType.H264 && isH264HighProfileSupported(codec)) {
+        //  supportedCodecInfos.add(new VideoCodecInfo(
+        //      name, MediaCodecUtils.getCodecProperties(type, /* highProfile= */ true), new ArrayList<>()));
+        //}
+        //
+        //supportedCodecInfos.add(new VideoCodecInfo(
+        //    name, MediaCodecUtils.getCodecProperties(type, /* highProfile= */ false), new ArrayList<>()));
+		//@@PVAPP_END
       }
     }
 
@@ -120,15 +140,18 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
   }
 
   private boolean isH264HighProfileSupported(MediaCodecInfo info) {
-    String name = info.getName();
-    // Support H.264 HP decoding on QCOM chips.
-    if (name.startsWith(QCOM_PREFIX)) {
-      return true;
-    }
-    // Support H.264 HP decoding on Exynos chips for Android M and above.
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && name.startsWith(EXYNOS_PREFIX)) {
-      return true;
-    }
-    return false;
+	//@@PVAPP_BEGIN
+	return true;  
+    //String name = info.getName();
+    //// Support H.264 HP decoding on QCOM chips.
+    //if (name.startsWith(QCOM_PREFIX)) {
+    //  return true;
+    //}
+    //// Support H.264 HP decoding on Exynos chips for Android M and above.
+    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && name.startsWith(EXYNOS_PREFIX)) {
+    //  return true;
+    //}
+    //return false;
+	//@@PVAPP_END
   }
 }
