@@ -12,6 +12,10 @@ package org.webrtc;
 
 import static org.webrtc.MediaCodecUtils.EXYNOS_PREFIX;
 import static org.webrtc.MediaCodecUtils.QCOM_PREFIX;
+import static org.webrtc.MediaCodecUtils.getDefaultCodecProperties;
+import static org.webrtc.MediaCodecUtils.getH264BaselineProperties;
+import static org.webrtc.MediaCodecUtils.getH264ConstrainedBaselineProperties;
+import static org.webrtc.MediaCodecUtils.getH264HighProperties;
 
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecInfo.CodecCapabilities;
@@ -79,14 +83,14 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
 		    }
 
 		    supportedCodecInfos.add(new VideoCodecInfo(name,
-				MediaCodecUtils.getH264ConstrainedBaselineProperties, new ArrayList<>()));
+				MediaCodecUtils.getH264ConstrainedBaselineProperties(), new ArrayList<>()));
 
 		    supportedCodecInfos.add(new VideoCodecInfo(name,
-				MediaCodecUtils.getH264BaselineProperties, new ArrayList<>()));
+				MediaCodecUtils.getH264BaselineProperties(), new ArrayList<>()));
 			
 		} else {
 		    supportedCodecInfos.add(new VideoCodecInfo(name,
-		        MediaCodecUtils.getDefaultCodecProperties, new ArrayList<>()));
+		        MediaCodecUtils.getDefaultCodecProperties(), new ArrayList<>()));
 		}
 		
         //if (type == VideoCodecMimeType.H264 && isH264HighProfileSupported(codec)) {

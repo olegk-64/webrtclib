@@ -13,6 +13,10 @@ package org.webrtc;
 import static org.webrtc.MediaCodecUtils.EXYNOS_PREFIX;
 import static org.webrtc.MediaCodecUtils.INTEL_PREFIX;
 import static org.webrtc.MediaCodecUtils.QCOM_PREFIX;
+import static org.webrtc.MediaCodecUtils.getDefaultCodecProperties;
+import static org.webrtc.MediaCodecUtils.getH264BaselineProperties;
+import static org.webrtc.MediaCodecUtils.getH264ConstrainedBaselineProperties;
+import static org.webrtc.MediaCodecUtils.getH264HighProperties;
 
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
@@ -109,17 +113,33 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
         MediaCodecUtils.ENCODER_COLOR_FORMATS, info.getCapabilitiesForType(mime));
 
     if (type == VideoCodecMimeType.H264) {
-      boolean isHighProfile = H264Utils.isSameH264Profile(
-          input.params, MediaCodecUtils.getCodecProperties(type, /* highProfile= */ true));
-      boolean isBaselineProfile = H264Utils.isSameH264Profile(
-          input.params, MediaCodecUtils.getCodecProperties(type, /* highProfile= */ false));
+       //@@PVAPP_BEGIN
+       boolean isBaselineProfile = H264Utils.isSameH264Profile(
+         input.params, MediaCodecUtils.getH264BaselineProperties());
+       boolean isConstrainedBaselineProfile = H264Utils.isSameH264Profile(
+         input.params, MediaCodecUtils.getH264ConstrainedBaselineProperties());
+       boolean isHighProfile = H264Utils.isSameH264Profile(
+         input.params, MediaCodecUtils.getH264HighProperties());
 
-      if (!isHighProfile && !isBaselineProfile) {
-        return null;
-      }
-      if (isHighProfile && !isH264HighProfileSupported(info)) {
-        return null;
-      }
+       if (!isBaselineProfile &&
+           !isConstrainedBaselineProfile &&
+           !isHighProfile) {
+          return null;
+       }
+
+        //boolean isHighProfile = H264Utils.isSameH264Profile(
+          //    input.params, MediaCodecUtils.getCodecProperties(type, /* highProfile= */ true));
+          //boolean isBaselineProfile = H264Utils.isSameH264Profile(
+          //    input.params, MediaCodecUtils.getCodecProperties(type, /* highProfile= */ false));
+
+          //if (!isHighProfile && !isBaselineProfile) {
+          //  return null;
+          //}
+	  //@@PVAPP_END
+
+          if (isHighProfile && !isH264HighProfileSupported(info)) {
+            return null;
+          }
     }
 
     return new HardwareVideoEncoder(new MediaCodecWrapperFactoryImpl(), codecName, type,
@@ -147,14 +167,14 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
 		    }
 
 		    supportedCodecInfos.add(new VideoCodecInfo(name,
-				MediaCodecUtils.getH264ConstrainedBaselineProperties, new ArrayList<>()));
+				MediaCodecUtils.getH264ConstrainedBaselineProperties(), new ArrayList<>()));
 
 		    supportedCodecInfos.add(new VideoCodecInfo(name,
-				MediaCodecUtils.getH264BaselineProperties, new ArrayList<>()));
+				MediaCodecUtils.getH264BaselineProperties(), new ArrayList<>()));
 			
 		} else {
 		    supportedCodecInfos.add(new VideoCodecInfo(name,
-		        MediaCodecUtils.getDefaultCodecProperties, new ArrayList<>()));
+		        MediaCodecUtils.getDefaultCodecProperties(), new ArrayList<>()));
 		}
 		
         //// TODO(sakal): Always add H264 HP once WebRTC correctly removes codecs that are not
