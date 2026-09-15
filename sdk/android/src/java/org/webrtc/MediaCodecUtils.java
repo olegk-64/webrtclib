@@ -80,19 +80,40 @@ class MediaCodecUtils {
     return false;
   }
 
-  static Map<String, String> getCodecProperties(VideoCodecMimeType type, boolean highProfile) {
-    switch (type) {
-      case VP8:
-      case VP9:
-      case AV1:
-      case H265:
-        return new HashMap<String, String>();
-      case H264:
-        return H264Utils.getDefaultH264Params(highProfile);
-      default:
-        throw new IllegalArgumentException("Unsupported codec: " + type);
-    }
+//@@PVAPP_BEGIN
+  //static Map<String, String> getCodecProperties(VideoCodecMimeType type, boolean highProfile) {
+  //  switch (type) {
+  //    case VP8:
+  //    case VP9:
+  //    case AV1:
+  //    case H265:
+  //      return new HashMap<String, String>();
+  //    case H264:
+  //      return H264Utils.getDefaultH264Params(highProfile);
+  //    default:
+  //      throw new IllegalArgumentException("Unsupported codec: " + type);
+  //  }
+  //}
+  
+  static Map<String, String> getDefaultCodecProperties() {
+    return new HashMap<String, String>();
   }
+  
+  static Map<String, String> getH264BaselineProperties() {
+    return H264Utils.getDefaultH264Params(
+        H264Utils.H264_BASELINE_3_1);
+  }
+
+  static Map<String, String> getH264ConstrainedBaselineProperties() {
+    return H264Utils.getDefaultH264Params(
+        H264Utils.H264_CONSTRAINED_BASELINE_3_1);
+  }
+
+  static Map<String, String> getH264HighProperties() {
+    return H264Utils.getDefaultH264Params(
+        H264Utils.H264_HIGH_3_1);
+  }
+//@@PVAPP_END
 
   static boolean isHardwareAccelerated(MediaCodecInfo info) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

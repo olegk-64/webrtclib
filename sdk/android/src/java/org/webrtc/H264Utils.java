@@ -28,20 +28,41 @@ class H264Utils {
   public static final String H264_CONSTRAINED_BASELINE_3_1 =
       H264_PROFILE_CONSTRAINED_BASELINE + H264_LEVEL_3_1;
 
-  public static Map<String, String> getDefaultH264Params(boolean isHighProfile) {
+//@@PVAPP_BEGIN
+  public static final String H264_PROFILE_BASELINE = "4200";
+  public static final String H264_PROFILE_HIGH = "6400";
+
+  public static final String H264_BASELINE_3_1 =
+      H264_PROFILE_BASELINE + H264_LEVEL_3_1;
+
+  public static final String H264_HIGH_3_1 =
+      H264_PROFILE_HIGH + H264_LEVEL_3_1;	
+	
+//  public static Map<String, String> getDefaultH264Params(boolean isHighProfile) {
+//    final Map<String, String> params = new HashMap<>();
+//    params.put(VideoCodecInfo.H264_FMTP_LEVEL_ASYMMETRY_ALLOWED, "1");
+//    params.put(VideoCodecInfo.H264_FMTP_PACKETIZATION_MODE, "1");
+//    params.put(VideoCodecInfo.H264_FMTP_PROFILE_LEVEL_ID,
+//        isHighProfile ? VideoCodecInfo.H264_CONSTRAINED_HIGH_3_1
+//                      : VideoCodecInfo.H264_CONSTRAINED_BASELINE_3_1);
+//    return params;
+//  }
+
+  static Map<String, String> getDefaultH264Params(String profileLevelId) {
     final Map<String, String> params = new HashMap<>();
     params.put(VideoCodecInfo.H264_FMTP_LEVEL_ASYMMETRY_ALLOWED, "1");
     params.put(VideoCodecInfo.H264_FMTP_PACKETIZATION_MODE, "1");
-    params.put(VideoCodecInfo.H264_FMTP_PROFILE_LEVEL_ID,
-        isHighProfile ? VideoCodecInfo.H264_CONSTRAINED_HIGH_3_1
-                      : VideoCodecInfo.H264_CONSTRAINED_BASELINE_3_1);
+    params.put(VideoCodecInfo.H264_FMTP_PROFILE_LEVEL_ID, profileLevelId);
     return params;
   }
-
-  public static VideoCodecInfo DEFAULT_H264_BASELINE_PROFILE_CODEC =
-      new VideoCodecInfo("H264", getDefaultH264Params(/* isHighProfile= */ false), new ArrayList<>());
-  public static VideoCodecInfo DEFAULT_H264_HIGH_PROFILE_CODEC =
-      new VideoCodecInfo("H264", getDefaultH264Params(/* isHighProfile= */ true), new ArrayList<>());
+  
+  public static final VideoCodecInfo DEFAULT_H264_BASELINE_PROFILE_CODEC =
+      new VideoCodecInfo("H264", getDefaultH264Params(H264_BASELINE_3_1), new ArrayList<>());
+  public static final VideoCodecInfo DEFAULT_H264_CONSTRAINED_BASELINE_PROFILE_CODEC =
+      new VideoCodecInfo("H264", getDefaultH264Params(H264_CONSTRAINED_BASELINE_3_1), new ArrayList<>());
+  public static final VideoCodecInfo DEFAULT_H264_HIGH_PROFILE_CODEC =
+      new VideoCodecInfo("H264", getDefaultH264Params(H264_HIGH_3_1), new ArrayList<>());
+//@@PVAPP_END
 
   public static boolean isSameH264Profile(
       Map<String, String> params1, Map<String, String> params2) {
