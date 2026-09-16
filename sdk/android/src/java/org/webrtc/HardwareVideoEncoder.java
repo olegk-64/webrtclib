@@ -12,6 +12,7 @@ package org.webrtc;
 
 import static android.media.MediaCodecInfo.CodecProfileLevel.AVCLevel3;
 import static android.media.MediaCodecInfo.CodecProfileLevel.AVCProfileHigh;
+import static android.media.MediaCodecInfo.CodecProfileLevel.AVCProfileBaseline;
 import static android.media.MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR;
 
 import android.media.MediaCodec;
@@ -261,11 +262,15 @@ class HardwareVideoEncoder implements VideoEncoder {
           profileLevelId = VideoCodecInfo.H264_CONSTRAINED_BASELINE_3_1;
         }
         switch (profileLevelId) {
+          case VideoCodecInfo.H264_HIGH_3_1:
           case VideoCodecInfo.H264_CONSTRAINED_HIGH_3_1:
             format.setInteger("profile", AVCProfileHigh);
             format.setInteger("level", AVCLevel3);
             break;
+          case VideoCodecInfo.H264_BASELINE_3_1:
           case VideoCodecInfo.H264_CONSTRAINED_BASELINE_3_1:
+            format.setInteger("profile", AVCProfileBaseline);
+            format.setInteger("level", AVCLevel3);
             break;
           default:
             Logging.w(TAG, "Unknown profile level id: " + profileLevelId);
